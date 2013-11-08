@@ -1,20 +1,28 @@
 <?php
 
 // Om config.php redan existerar så gör ingenting.
-if (file_exists("config.php"))
+if (file_exists("config.php")) {
+	echo "Fel: config.php existerar redan.<br>Redigera den manuellt eller ta bort den!";
 	die();
+}
 
 // Kontrollera att systemet har skrivrättigheter.
-if (!is_writable("."))
+if (!is_writable(".")) {
+	echo "Fel: Inga skrivrättigheter finns till mappen Conman är installerat i.<br>Rätta till felet och försök igen!";
 	die();
+}
 
 // Om inte install.csv, som innehåller installationsfrågorna, existerar så gör ingenting.
-if (!file_exists("install.csv"))
+if (!file_exists("install.csv")) {
+	echo "Fel: install.csv saknas, installera om Conman!";
 	die();
+}
 
 // Om inte install.sql, som innehåller databasposterna, existerar så gör ingenting.
-if (!file_exists("install.sql"))
-	die();	
+if (!file_exists("install.sql")) {
+	echo "Fel: install.sql saknas, installera om Conman!";
+	die();
+}
 
 // Läs in install.csv
 $questions = array();
@@ -161,12 +169,12 @@ include("config.php");
 $mysqli = new mysqli(Settings::$DbHost, Settings::$DbUser, Settings::$DbPassword, Settings::$DbName);
 
 if ($mysqli->connect_errno) {
-	printf("Databasanslutningen misslyckades: %s\n\n", $mysqli->connect_error);
-	printf("Redigera config.php manuellt och rätta till inställningarna!\nKör efter det install.sql manuellt!");
+	printf("Databasanslutningen misslyckades: %s<br><br>", $mysqli->connect_error);
+	printf("Redigera config.php manuellt och rätta till inställningarna!<br>Kör efter det install.sql manuellt!");
 	die();
 }
 
 if (!$mysqli->multi_query(file_get_contents("install.sql"))) {
-	printf("Databasen kunde inte uppdateras, kör install.sql manuellt!\n");
+	printf("Databasen kunde inte uppdateras, kör install.sql manuellt!");
 	die();
 }
