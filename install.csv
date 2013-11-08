@@ -21,6 +21,6 @@ Arrangörsinformation,AllowPayson,checkbox,,"Is payson used for the final paymen
 Arrangörsinformation,RequireEmail,checkbox,,"Do you require email activation?"
 E-postserverinformation,MailFrom,text,noreply@conman.nu,"Email the notifications are sent from"
 E-postserverinformation,SMTPServer,text,smtp.gmail.com,"SMTP-server"
-E-postserverinformation,SMTPPort,number,25,"Smtp port"
+E-postserverinformation,SMTPPort,number,587,"Smtp port"
 E-postserverinformation,SMTPUser,text,noreply@conman.nu,"SMTP-user"
 E-postserverinformation,SMTPPassword,password,,"SMTP-password"
