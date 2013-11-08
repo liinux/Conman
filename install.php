@@ -43,8 +43,7 @@ if (!empty($_POST)) {
 				$_POST[$question[1]] = "true";
 			else
 				$_POST[$question[1]] = "false";
-
-		if (empty($_POST[$question[1]]))
+		elseif (empty($_POST[$question[1]]) && $question[2] != "select")
 			$validationerror = true;
 	}
 }
