@@ -6,7 +6,10 @@ class CFactory {
 		if (!class_exists("PHPMailer")) {
 			include(Settings::getRoot() . '/includes/phpmailer/class.phpmailer.php');
 		}
-		$mail = new PHPMailer();
+		$mail = new PHPMailer(true);	// "true" sätter igång exceptionshantering istället för utskrivna felmeddelanden.
+
+		try
+		{
 		$mail->IsSMTP();                                      // set mailer to use SMTP
 		$mail->Host = Settings::$SMTPServer;  // specify main and backup server
 		$mail->Port = Settings::$SMTPPort; 
@@ -16,7 +19,15 @@ class CFactory {
 		$mail->Password = Settings::$SMTPPassword; // SMTP password
 		$mail->SetFrom(Settings::$MailFrom, 'noreply');
 		$mail->AddReplyTo(Settings::$MailFrom, 'noreply');
-		$mail->CharSet = 'UTF-8';		
+		$mail->CharSet = 'UTF-8';
+		}
+		catch (phpmailerException $e)
+		{
+			error_log("Error in mail settings: $e");
+			echo "Ett fel i epostinställningarna har loggats, kontakta administratören!";
+			die();
+		}
+
 		return $mail;
 	}
 	

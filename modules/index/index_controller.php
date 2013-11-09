@@ -47,11 +47,14 @@ class IndexController extends Controller
 		$thecode = $verificationcode->putCode($pnr);
 		$mailer = CFactory::getMailer();
 		$this->_set('email', $the_member[0]['eMail']);
-		$mailer->AddAddress($the_member[0]['eMail']);
-		$mailer->Subject = 'Registering till ' . Settings::$EventName;
-		$mailer->MsgHTML("<p>Hej!</p><p>Nu har du snart en användare i ConMan och kan köpa din biljett till " . Settings::$EventName . ". <a href=\"".Router::url("validatecode/$pnr/$thecode", true)."\">Klicka här</a> för att verifiera din emailadress, välja användarnamn och fortsätta i registreringsprocessen.</p><p>Med vänliga hälsningar,<br />" . Settings::$Society . " och ConMan</p>");		
-		if (!$mailer->Send()) {
-			die("Kunde inte skicka");
+		
+		try {
+			$mailer->AddAddress($the_member[0]['eMail']);
+			$mailer->Subject = 'Registering till ' . Settings::$EventName;
+			$mailer->MsgHTML("<p>Hej!</p><p>Nu har du snart en användare i ConMan och kan köpa din biljett till " . Settings::$EventName . ". <a href=\"".Router::url("validatecode/$pnr/$thecode", true)."\">Klicka här</a> för att verifiera din emailadress, välja användarnamn och fortsätta i registreringsprocessen.</p><p>Med vänliga hälsningar,<br />" . Settings::$Society . " och ConMan</p>");		
+			$mailer->Send();
+		} catch (phpmailerException $e) {
+			$this->_set('status', 'wrong_email');
 		}
 		return $thecode;
 	}
@@ -67,11 +70,14 @@ class IndexController extends Controller
 		
 		$mailer = CFactory::getMailer();
 		$this->_set('email', $the_member[0]['eMail']);
-		$mailer->AddAddress($the_member[0]['eMail']);
-		$mailer->Subject = 'Lösenordsåterställning till ' . Settings::$EventName;
-		$mailer->MsgHTML("Hej " . $users_member[0]['username'] . "!<br /><a href=\"".Router::url("passwordreset/$id/$thecode", true)."\">Klicka här för att återställa ditt lösenord</a>");
-		if (!$mailer->Send()) {
-			die("Kunde inte skicka");
+		
+		try {
+			$mailer->AddAddress($the_member[0]['eMail']);
+			$mailer->Subject = 'Lösenordsåterställning till ' . Settings::$EventName;
+			$mailer->MsgHTML("Hej " . $users_member[0]['username'] . "!<br /><a href=\"".Router::url("passwordreset/$id/$thecode", true)."\">Klicka här för att återställa ditt lösenord</a>");
+			$mailer->Send();
+		} catch (phpmailerException $e) {
+			$this->_set('status', 'wrong_email');
 		}
 	}
 
@@ -191,8 +197,8 @@ class IndexController extends Controller
 			$this->_set('ssid', $pnr); // Denna biten för personer med follow redirect avslaget
 			$this->_set('code', $thecode);
 		} else {
-			$this->sendEmail($the_member, $the_member[0]['PersonID']);
 			$this->_set('status', 'emailsent');
+			$this->sendEmail($the_member, $the_member[0]['PersonID']);
 		}
 	}
 
@@ -206,9 +212,9 @@ class IndexController extends Controller
 		$email = $_REQUEST['email'];
 		$member = Model::getModel('member');
 		$the_member = $member->getMemberByEmail($email);
-		if (count($the_member)) {
-			$this->sendPassEmail(array(0 => $the_member));
+		if ($the_member != false) {
 			$this->_set('status', 'emailsent');
+			$this->sendPassEmail(array(0 => $the_member));
 		} else {
 			$this->_set('status', 'wrong_email');
 		}
