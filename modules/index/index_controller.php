@@ -54,7 +54,8 @@ class IndexController extends Controller
 			$mailer->MsgHTML("<p>Hej!</p><p>Nu har du snart en användare i ConMan och kan köpa din biljett till " . Settings::$EventName . ". <a href=\"".Router::url("validatecode/$pnr/$thecode", true)."\">Klicka här</a> för att verifiera din emailadress, välja användarnamn och fortsätta i registreringsprocessen.</p><p>Med vänliga hälsningar,<br />" . Settings::$Society . " och ConMan</p>");		
 			$mailer->Send();
 		} catch (phpmailerException $e) {
-			$this->_set('status', 'wrong_email');
+			// Eftersom eposten, och serverns epostinställningar, kontrollerats i förväg borde detta inte kunna hända.
+			// Vid behov kan index.register.php uppdateras för att hantera detta fall.
 		}
 		return $thecode;
 	}
@@ -77,7 +78,7 @@ class IndexController extends Controller
 			$mailer->MsgHTML("Hej " . $users_member[0]['username'] . "!<br /><a href=\"".Router::url("passwordreset/$id/$thecode", true)."\">Klicka här för att återställa ditt lösenord</a>");
 			$mailer->Send();
 		} catch (phpmailerException $e) {
-			$this->_set('status', 'wrong_email');
+			$this->_set('status', 'mailing_error');
 		}
 	}
 

@@ -1,24 +1,16 @@
-<style type="text/css">
-label{
-	display: block;
-}
-</style>
-
+<div style="margin-bottom: 20px;">
 <?php if($status == 'emailsent'):?>
-
-Ett mail har skickats till din mail, <?php echo $email;?>. Klicka på länken i mailet för att fortsätta. Har du inte fått något mail (kolla även i din spam-/skräppost) eller är det inte din adress? Kontakta: <a href="mailto:<?php echo Settings::$TechEmail; ?>"><?php echo Settings::$TechEmail; ?></a>	
-
-<?php elseif($status == 'wrong_ssid'):?>
-Tyvärr är personnummret du skrev in inte giltigt. <a href="<?php echo Router::url('index');?>">Försök igen</a>
-
-<?php elseif($status == 'not_member'):?>
-Vi hittade dig inte i databasen. Är detta fel? Kontakta <a href="<?php echo Settings::$TechEmail; ?>"><?php echo Settings::$TechEmail; ?></a><br/>
-<br/>
-Du är tydligen inte medlem än, så du får gå tillbaka och bli det.
-
+Ett mail har skickats till adressen <?php echo $email;?>, klicka på länken i mailet för att fortsätta.<br>
+<br>
+Har du inte fått något mail (kolla även i din spam-/skräppost)?<br>
+Kontakta <a href="mailto:<?php echo Settings::$TechEmail; ?>"><?php echo Settings::$TechEmail; ?></a>!
+<?php elseif($status == 'mailing_error'):?>
+Ett fel uppstod när vi försökte maila dig.<br>
+<br>
+Kontakta <a href="<?php echo Settings::$TechEmail; ?>"><?php echo Settings::$TechEmail; ?></a>!
 <?php elseif($status == 'wrong_email'):?>
-Tyvärr är email-adressen du skrev in inte i våran databas, antingen är du inte registrerad eller så skrev du in fel adress. 
-
-Vänligen <a href="<?php echo Router::url('forgetPass');?>">Försök igen</a> eller <a href="<?php echo Router::url('index');?>">Registrera Dig!</a>
-
+Tyvärr är adressen du skrev in inte i våran databas, antingen är du inte registrerad eller så skrev du in fel adress.<br>
+<br>
+Vänligen <a href="<?php echo Router::url('forgetPass');?>">försök igen</a> eller <a href="<?php echo Router::url('index');?>">registrera dig</a>!
 <?php endif;?>
+</div>

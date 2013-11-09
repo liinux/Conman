@@ -1,8 +1,14 @@
 <?php if(@$status == 'emailsent'):?>
-<p class="nomargin">Ett mail har skickats till din registrerade mail, <?php echo $email;?>, så du bör ha det inom kort men det kan ta upp till 30 minuter. Hittar du inte mailet i din inbox så ta en titt i din spam-/skräppost då mail från ConMan dessvärre hamnar där ibland. Klicka sedan på länken i mailet för att fortsätta registreringen med val av användarnamn, lösenord etc.</p>
+<div style="margin-bottom: 20px;">
+<p class="nomargin">Ett mail har skickats till din registrerade mail, <?php echo $email;?>, så du bör ha det inom kort men det kan ta upp till 30 minuter.<br>
+<br>
+Hittar du inte mailet så ta en titt i din skräppostmapp. Klicka sedan på länken i mailet för att fortsätta registreringen.</p>
+</div>
 <?php elseif(@$status == 'noemailrequired'):?>
+<div style="margin-bottom: 20px;">
 <a href="<?php echo Router::url("validatecode/$ssid/$code");?>">Klicka h&auml;r f&ouml;r att 
 forts&auml;tta</a>
+</div>
 <?php elseif(@$status == 'wrong_ssid'):?>
 Tyvärr är personnummret du skrev in inte giltigt. <a href="<?php echo Router::url('index');?>">Försök igen</a>
 <?php elseif(@$status == 'not_member'):?>
